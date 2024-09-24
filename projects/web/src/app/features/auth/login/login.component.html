@@ -1,0 +1,50 @@
+<form
+	class="auth-form"
+	[formGroup]="loginForm"
+	(ngSubmit)="onSubmit()"
+>
+	<header>
+		<h1 class="auth-form__heading">Log In</h1>
+	</header>
+
+	<engomc-label
+		class="auth-form__label"
+		labelText="Email"
+	>
+		<input
+			type="email"
+			autocomplete="email"
+			formControlName="email"
+			placeholder="your@email.com"
+			data-testid="login-email-input"
+		/>
+	</engomc-label>
+	<engomc-label
+		class="auth-form__label"
+		labelText="Password"
+	>
+		<input
+			autocomplete="current-password"
+			formControlName="password"
+			type="password"
+			placeholder="yourSecretPassword123"
+			data-testid="login-password-input"
+		/>
+	</engomc-label>
+
+	<footer class="auth-form__footer">
+		<div class="auth-form__links">
+			<a [routerLink]="authChildPaths.register.url">Register</a>
+			<a [routerLink]="authChildPaths.forgotPassword.url">Forgot Password?</a>
+		</div>
+
+		<button
+			data-testid="login-submit-button"
+			class="primary auth-form__submit-button"
+			type="submit"
+			[engomcLoading]="isLoading$ | async"
+		>
+			Sign In
+		</button>
+	</footer>
+</form>

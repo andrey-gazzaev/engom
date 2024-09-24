@@ -1,0 +1,36 @@
+name: Run tests
+on: push
+jobs:
+  build:
+    runs-on: saritasa-rocks-eks
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: 'package.json'
+
+      # TODO (https://github.com/saritasa-nest/saritasa-frontend-boilerplate-angular/issues/107): Remove Chrome dependencies when we migrate to Jest
+      # https://github.com/browser-actions/setup-chrome/issues/372
+      - name: Install Chrome dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates fonts-liberation libappindicator3-1 libasound2 libatk-bridge2.0-0 \
+            libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 libglib2.0-0 \
+            libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 \
+            libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 \
+            lsb-release wget xdg-utils
+
+      - name: Install and setup Google Chrome
+        uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
+
+      - name: Setup dependences
+        run: npm ci
+
+      - name: Test
+        run: |
+          npm run test:ci
+        env:
+          CHROME_BIN: ${{ steps.setup-chrome.outputs.chrome-path }}

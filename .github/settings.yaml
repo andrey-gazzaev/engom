@@ -1,0 +1,3 @@
+autolinks:
+  - key_prefix: FT
+    url_template: https://saritasa.atlassian.net/browse/FT-<num>

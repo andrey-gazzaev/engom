@@ -1,0 +1,13 @@
+<label class="label">
+	@if (labelText !== null) {
+		<span
+			class="label__content"
+			data-testid="label"
+		>
+			{{ labelText }}
+		</span>
+	}
+	<engomc-form-error-wrapper>
+		<ng-content />
+	</engomc-form-error-wrapper>
+</label>
