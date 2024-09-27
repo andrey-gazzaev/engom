@@ -14,6 +14,21 @@ services:
       - network
     ports:
       - 5432:5432
+  graphql:
+    container_name: engom-graphql
+    restart: always
+    image: engom-graphql
+    build:
+        context: ./graphql
+    env_file:
+        - ./.env
+    depends_on:
+        - db
+    networks:
+        - network
+    ports:
+        - 5433:5433
+    command: ["--connection", "${DATABASE_URL}", "--port", "5433", "--schema", "public", "--append-plugins", "postgraphile-plugin-connection-filter"]
 
 networks:
   network:
