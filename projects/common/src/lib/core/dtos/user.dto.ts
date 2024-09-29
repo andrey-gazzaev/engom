@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+import { userRolesDto } from './user-role.dto';
+import { groupDtoSchema } from './group.dto';
+import { createNodesDtoSchema } from './nodes.dto';
+
 /** User DTO schema. */
 export const userDtoSchema = z.object({
 
@@ -7,11 +11,25 @@ export const userDtoSchema = z.object({
 	id: z.number(),
 
 	/** First name. */
-	first_name: z.string(),
+	firstName: z.string(),
 
 	/** Last name. */
-	last_name: z.string(),
+	lastName: z.string(),
+
+	role: z.enum(userRolesDto),
+
+	groupsByUserId: createNodesDtoSchema(groupDtoSchema),
 }).strict();
 
 /** User DTO. */
 export type UserDto = Readonly<z.infer<typeof userDtoSchema>>;
+
+/** Users DTO schema. */
+export const usersDtoSchema = z.object({
+	data: z.object({
+		allUsers: createNodesDtoSchema(userDtoSchema),
+	}),
+});
+
+/** Users DTO. */
+export type UsersDto = Readonly<z.infer<typeof usersDtoSchema>>;

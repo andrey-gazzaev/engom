@@ -8,6 +8,4 @@ export abstract class AppConfig {
 	/** API base URL. */
 	public abstract readonly apiUrl: string;
 
-	/** App version. */
-	public abstract readonly version: string;
 }

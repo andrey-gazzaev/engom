@@ -25,6 +25,11 @@ export class AppUrlsConfig {
 		changePassword: this.toApi('users/change_password/'),
 	} as const;
 
+	/** Routes for getting/editing current user's info. */
+	public readonly graphiql = {
+		zero: this.toApi('/'),
+	} as const;
+
 	/**
 	 * Checks whether the url is application-scoped.
 	 * @param url Url to check.

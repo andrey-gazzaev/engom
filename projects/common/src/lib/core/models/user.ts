@@ -1,16 +1,21 @@
-import { z } from 'zod';
-
-const userSchema = z.object({
-
-	/** ID. */
-	id: z.number(),
-
-	/** First name. */
-	firstName: z.string(),
-
-	/** Last name. */
-	lastName: z.string(),
-}).strict();
+import { Group } from './group';
+import { UserRole } from './user-role';
 
 /** Basic representation of a user. */
-export type User = Readonly<z.infer<typeof userSchema>>;
+export type User = {
+
+	/** ID. */
+	readonly id: number;
+
+	/** First name. */
+	readonly firstName: string;
+
+	/** Last name. */
+	readonly lastName: string;
+
+	/** Role. */
+	readonly role: UserRole;
+
+	/** Groups that the user belong to. */
+	readonly groups: readonly Group[];
+};
