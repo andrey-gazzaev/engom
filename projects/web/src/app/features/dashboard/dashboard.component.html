@@ -45,7 +45,26 @@
 		<section>
 			<h2>Your tasks</h2>
 
-			<p>Empty tasks</p>
+			@let userTasks = userTasks$ | async;
+			@if (userTasks !== null) {
+				<ul>
+					@for (task of userTasks; track task) {
+						<li>
+							{{ task.description }}
+							<section>
+								<h3>Task dictionary</h3>
+								<ul>
+									@for (vocabulary of task.dictionary; track vocabulary.id) {
+										<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
+									}
+								</ul>
+							</section>
+						</li>
+					}
+				</ul>
+			} @else {
+				<p>No tasks</p>
+			}
 		</section>
 	</main>
 }

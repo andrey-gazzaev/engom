@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concat, first, ignoreElements, map, merge, Observable, of, OperatorFunction, pipe, shareReplay, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, concat, first, ignoreElements, map, merge, Observable, OperatorFunction, pipe, shareReplay, switchMap, throwError } from 'rxjs';
 
 import { AppError } from '../models/app-error';
 import { Login } from '../models/login';
@@ -94,6 +94,10 @@ export class UserService {
 		return this.authService.confirmPasswordReset(data);
 	}
 
+	/**
+	 * Selects specified user as the current user.
+	 * @param user User will be the current user.
+	 */
 	public selectCurrentUser(user: User): void {
 		this._currentUser$.next(user);
 	}

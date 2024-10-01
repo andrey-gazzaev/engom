@@ -41,8 +41,7 @@ export class UserApiService {
 					}
 				}
 			}
-		}
-		`;
+		}`;
 
 		return this.httpClient.post<unknown>(this.apiUrls.graphiql.zero, { query, operationName: null, variables: null }).pipe(
 			map(response => usersDtoSchema.parse(response)),
