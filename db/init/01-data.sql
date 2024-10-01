@@ -20,3 +20,47 @@ INSERT INTO public.groupUser (user_id, group_id) VALUES
 (3, 2),
 (4, 1),
 (4, 2);
+
+/* Create some dummy users */
+INSERT INTO public.task (description) VALUES
+('p1 ex3'),
+('p5 ex5 and 6'),
+('p153 ex8 and 9'),
+('p1 ex4'),
+('p3 ex2');
+
+/* Create some dummy posts*/
+INSERT INTO public.groupTask (task_id, group_id, lastSentAt) VALUES
+(1, 1, null),
+(2, 1, null),
+(3, 2, null),
+(4, 1, null),
+(4, 2, null),
+(5, 2, null);
+
+INSERT INTO public.userTask (task_id, user_id, completedAt) VALUES
+(1, 1, null),
+(2, 1, null),
+(3, 2, null),
+(4, 1, null),
+(4, 2, null),
+(5, 2, null),
+(5, 3, null);
+
+/* Create some dummy users */
+INSERT INTO public.vocabulary (origin, translation) VALUES
+('Anxiety', 'Беспокойство'),
+('Closet', 'Шкаф'),
+('Bedroom', 'Спальня'),
+('Mattress', 'Матрас'),
+('Dinner', 'Обед');
+
+INSERT INTO public.vocabularyTask (vocabulary_id, task_id) VALUES
+(1, 1),
+(1, 2),
+(2, 3),
+(2, 4),
+(3, 5),
+(3, 1),
+(4, 1),
+(5, 2);
