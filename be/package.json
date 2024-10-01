@@ -1,0 +1,23 @@
+{
+	"name": "be",
+	"description": "proxy for graphql",
+	"version": "0.0.1",
+	"engines": {
+		"node": "20.11.1"
+	},
+	"engineStrict": true,
+	"volta": {
+		"node": "20.11.1"
+	},
+	"main": "timeweb.js",
+	"dependencies": {
+		"express": "^4.21.0",
+		"postgraphile": "^4.13.0",
+		"postgraphile-plugin-connection-filter": "2.3.0",
+		"cors": "^2.8.5",
+		"dotenv": "^16.4.5"
+	},
+	"scripts": {
+		"start": "node server.js"
+	}
+}

@@ -29,17 +29,19 @@ export class UsersApiService {
 					firstName
 					lastName
 					role
-					groupsByUserId {
+					groupusersByUserId {
 						nodes {
-							id
-							name
+							groupByGroupId {
+								id
+								name
+							}
 						}
 					}
 				}
 			}
-		}`;
+		}`.trim();
 
-		return this.httpClient.post<unknown>(this.apiUrls.graphiql.zero, { query }).pipe(
+		return this.httpClient.post<unknown>(this.apiUrls.graphiql.zero, { query, operationName: null, variables: null }).pipe(
 			map(response => usersDtoSchema.parse(response)),
 			map(usersDto => usersDto.data.allUsers.nodes.map(userDto => this.userMapper.fromDto(userDto))),
 		);

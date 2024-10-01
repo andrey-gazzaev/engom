@@ -27,7 +27,7 @@ export class AppUrlsConfig {
 
 	/** Routes for getting/editing current user's info. */
 	public readonly graphiql = {
-		zero: this.toApi('/'),
+		zero: this.toApi(''),
 	} as const;
 
 	/**

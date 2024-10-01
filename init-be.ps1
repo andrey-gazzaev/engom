@@ -1,8 +1,8 @@
 # Shut down containers
 docker-compose down
 
-# Rebuild the GraphQL container
-docker-compose build graphql
+# Rebuild the be container
+docker-compose build be
 
 # Rerun containers
 docker-compose up -d
