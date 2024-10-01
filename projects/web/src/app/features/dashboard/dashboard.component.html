@@ -1,5 +1,51 @@
-<code>
-	<pre>
-		{{ users$ | async | json}}
-	</pre>
-</code>
+@let currentUser = userService.currentUser$ | async;
+@if (currentUser === null) {
+	<main class="login-page">
+		<h1>Welcome, please select a user.</h1>
+
+		@let users = users$ | async;
+		@let isUsersLoading = isLoading$ | async;
+
+		@if (isUsersLoading) {
+			Loading...
+		}
+
+		@if (users !== null) {
+			<ul>
+				@for (user of users; track user.id) {
+					<li>
+						{{ user | engomcFullName }} {{ user.role }}
+						<button
+							type="button"
+							(click)="onUserSelect(user)"
+						>
+							Select
+						</button>
+					</li>
+				}
+			</ul>
+		}
+	</main>
+} @else {
+	<main class="dashboard-page">
+		<h1>Welcome {{ currentUser | engomcFullName }}.</h1>
+
+		<section>
+			<h2>Your groups</h2>
+
+			<ul>
+				@for (group of currentUser.groups; track group.id) {
+					<li>
+						{{ group.name }}
+					</li>
+				}
+			</ul>
+		</section>
+
+		<section>
+			<h2>Your tasks</h2>
+
+			<p>Empty tasks</p>
+		</section>
+	</main>
+}

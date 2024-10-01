@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { User } from '../models/user';
 
 import { UserMapper } from '../mappers/user.mapper';
-import { userDtoSchema } from '../dtos/user.dto';
+import { userDtoSchema, usersDtoSchema } from '../dtos/user.dto';
 
 import { AppUrlsConfig } from './app-urls.config';
 
@@ -14,12 +14,41 @@ import { AppUrlsConfig } from './app-urls.config';
 	providedIn: 'root',
 })
 export class UserApiService {
-
 	private readonly apiUrls = inject(AppUrlsConfig);
 
 	private readonly httpClient = inject(HttpClient);
 
 	private readonly userMapper = inject(UserMapper);
+
+	/** Gets users.*/
+	public getUsers(): Observable<User[]> {
+		const query = `{
+			allUsers {
+				nodes {
+					id
+					firstName
+					lastName
+					role
+					email
+					createdDate
+					groupusersByUserId {
+						nodes {
+							groupByGroupId {
+								id
+								name
+							}
+						}
+					}
+				}
+			}
+		}
+		`;
+
+		return this.httpClient.post<unknown>(this.apiUrls.graphiql.zero, { query, operationName: null, variables: null }).pipe(
+			map(response => usersDtoSchema.parse(response)),
+			map(usersDto => usersDto.data.allUsers.nodes.map(userDto => this.userMapper.fromDto(userDto))),
+		);
+	}
 
 	/** Returns current user info.*/
 	public getCurrentUser(): Observable<User> {

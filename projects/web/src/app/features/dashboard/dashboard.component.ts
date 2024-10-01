@@ -8,7 +8,9 @@ import { LoadingDirective } from '@engom/common/shared/directives/loading.direct
 import { RouterLink } from '@angular/router';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { UsersApiService } from '@engom/common/core/services/users-api.service';
+import { UserApiService } from '@engom/common/core/services/user-api.service';
+import { FullNamePipe } from '@engom/common/shared/pipes/fullname.pipe';
+import { User } from '@engom/common/core/models/user';
 
 import { injectWebAppRoutes } from '../shared/web-route-paths';
 
@@ -19,23 +21,16 @@ import { injectWebAppRoutes } from '../shared/web-route-paths';
 	styleUrls: ['./dashboard.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [
-		MatIconModule,
-		LoadingDirective,
-		RouterLink,
-		AsyncPipe,
-		JsonPipe,
-	],
+	imports: [MatIconModule, LoadingDirective, RouterLink, AsyncPipe, JsonPipe, FullNamePipe],
 })
 export class DashboardComponent {
-
 	/** Users service. */
 	public readonly userService = inject(UserService);
 
 	/** App config service. */
 	public readonly appConfigService = inject(AppConfig);
 
-	private readonly usersApiService = inject(UsersApiService);
+	private readonly usersApiService = inject(UserApiService);
 
 	private readonly destroyRef = inject(DestroyRef);
 
@@ -46,17 +41,21 @@ export class DashboardComponent {
 	protected readonly routePaths = injectWebAppRoutes();
 
 	/** Current user. */
-	public readonly users$ = this.usersApiService.getUsers().pipe(
-		toggleExecutionState(this.isLoading$),
-	);
+	public readonly users$ = this.usersApiService.getUsers().pipe(toggleExecutionState(this.isLoading$));
 
 	/** Handles click on logout button. */
 	public onLogoutClick(): void {
-		this.userService.logout()
-			.pipe(
-				toggleExecutionState(this.isLoading$),
-				takeUntilDestroyed(this.destroyRef),
-			)
+		this.userService
+			.logout()
+			.pipe(toggleExecutionState(this.isLoading$), takeUntilDestroyed(this.destroyRef))
 			.subscribe();
+	}
+
+	/**
+	 * Handles a user selection.
+	 * @param user User that will be selected.
+	 */
+	public onUserSelect(user: User): void {
+		this.userService.selectCurrentUser(user);
 	}
 }

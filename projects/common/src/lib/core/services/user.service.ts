@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { catchError, concat, first, ignoreElements, map, merge, Observable, of, OperatorFunction, pipe, shareReplay, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, concat, first, ignoreElements, map, merge, Observable, of, OperatorFunction, pipe, shareReplay, switchMap, throwError } from 'rxjs';
 
 import { AppError } from '../models/app-error';
 import { Login } from '../models/login';
@@ -8,7 +8,6 @@ import { User } from '../models/user';
 import { UserSecret } from '../models/user-secret';
 
 import { AuthApiService } from './auth-api.service';
-import { UserApiService } from './user-api.service';
 import { UserSecretStorageService } from './user-secret-storage.service';
 
 /**
@@ -29,11 +28,13 @@ export class UserService {
 
 	private readonly userSecretStorage = inject(UserSecretStorageService);
 
-	private readonly userApiService = inject(UserApiService);
+	// private readonly userApiService = inject(UserApiService);
+
+	private readonly _currentUser$ = new BehaviorSubject<User | null>(null);
 
 	public constructor() {
 		this.currentUser$ = this.initCurrentUserStream();
-		this.isAuthorized$ = this.currentUser$.pipe(map(user => user != null));
+		this.isAuthorized$ = this._currentUser$.pipe(map(user => user != null));
 	}
 
 	/**
@@ -93,6 +94,10 @@ export class UserService {
 		return this.authService.confirmPasswordReset(data);
 	}
 
+	public selectCurrentUser(user: User): void {
+		this._currentUser$.next(user);
+	}
+
 	private saveSecretAndWaitForAuthorized(): OperatorFunction<UserSecret, void> {
 		return pipe(
 			switchMap(secret => {
@@ -110,7 +115,7 @@ export class UserService {
 
 	private initCurrentUserStream(): Observable<User | null> {
 		return this.userSecretStorage.currentSecret$.pipe(
-			switchMap(secret => (secret ? this.userApiService.getCurrentUser() : of(null))),
+			switchMap(_ => this._currentUser$),
 			shareReplay({ bufferSize: 1, refCount: false }),
 		);
 	}
