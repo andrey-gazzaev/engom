@@ -27,12 +27,3 @@ CREATE TABLE public.groupUser (
     group_id INTEGER REFERENCES public.group (id),
 		primary key (user_id, group_id)
 );
-
-create function "user_groupsByUserId"(u public."user")
-returns setof public.group as $$
-  select public.group.*
-  from public.group
-  inner join public.groupUser
-  on (public.groupUser.group_id = public.group.id)
-  where public.groupUser.user_id = u.id;
-$$ language sql stable;
