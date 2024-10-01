@@ -24,7 +24,7 @@ export class UserMapper implements MapperFromDto<UserDto, User> {
 			lastName: dto.lastName,
 			id: dto.id,
 			role: this.userRoleMapper.fromDto(dto.role),
-			groups: dto.groupsByUserId.nodes.map(group => this.groupMapper.fromDto(group)),
+			groups: dto.groupusersByUserId.nodes.map(group => this.groupMapper.fromDto(group.groupByGroupId)),
 		};
 	}
 }

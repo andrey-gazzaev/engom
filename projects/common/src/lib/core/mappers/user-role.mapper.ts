@@ -7,9 +7,9 @@ import { reverseRecord } from '../utils/reverse-record';
 import { Mapper } from './mappers';
 
 const USER_ROLE_FROM_DTO_MAP: Record<UserRoleDto, UserRole> = {
-	admin: 'admin',
-	student: 'student',
-	teacher: 'teacher',
+	ADMIN: 'admin',
+	STUDENT: 'student',
+	TEACHER: 'teacher',
 };
 
 const USER_ROLE_TO_DTO_MAP = reverseRecord(USER_ROLE_FROM_DTO_MAP);

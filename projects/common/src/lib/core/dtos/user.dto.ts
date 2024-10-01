@@ -5,21 +5,28 @@ import { groupDtoSchema } from './group.dto';
 import { createNodesDtoSchema } from './nodes.dto';
 
 /** User DTO schema. */
-export const userDtoSchema = z.object({
+export const userDtoSchema = z
+	.object({
+		/** ID. */
+		id: z.number(),
 
-	/** ID. */
-	id: z.number(),
+		/** First name. */
+		firstName: z.string(),
 
-	/** First name. */
-	firstName: z.string(),
+		/** Last name. */
+		lastName: z.string(),
 
-	/** Last name. */
-	lastName: z.string(),
+		/** Email. */
+		email: z.string(),
 
-	role: z.enum(userRolesDto),
+		/** Role. */
+		role: z.enum(userRolesDto),
 
-	groupsByUserId: createNodesDtoSchema(groupDtoSchema),
-}).strict();
+		groupusersByUserId: createNodesDtoSchema(z.object({ groupByGroupId: groupDtoSchema })),
+
+		createdDate: z.string(),
+	})
+	.strict();
 
 /** User DTO. */
 export type UserDto = Readonly<z.infer<typeof userDtoSchema>>;
