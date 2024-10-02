@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, concat, first, ignoreElements, map, merge, Observable, OperatorFunction, pipe, shareReplay, switchMap, throwError } from 'rxjs';
+import { BehaviorSubject, first, ignoreElements, map, merge, Observable, OperatorFunction, pipe, shareReplay, switchMap } from 'rxjs';
 
-import { AppError } from '../models/app-error';
 import { Login } from '../models/login';
 import { PasswordReset } from '../models/password-reset';
 import { User } from '../models/user';
@@ -52,28 +51,6 @@ export class UserService {
 	 */
 	public logout(): Observable<void> {
 		return this.userSecretStorage.removeSecret();
-	}
-
-	/** Attempts to refresh user secret, in case it is not possible logs out current user.. */
-	public refreshSecret(): Observable<void> {
-		const refreshSecretIfPresent$ = this.userSecretStorage.currentSecret$.pipe(
-			first(),
-			switchMap(secret => {
-				if (secret != null) {
-					return this.authService.refreshSecret(secret);
-				}
-				throw new AppError('Unauthorized');
-			}),
-			switchMap(newSecret => this.userSecretStorage.saveSecret(newSecret)),
-		);
-		return refreshSecretIfPresent$.pipe(
-			catchError((error: unknown) =>
-				concat(
-					this.logout().pipe(ignoreElements()),
-					throwError(() => error),
-				)),
-			map(() => undefined),
-		);
 	}
 
 	/**

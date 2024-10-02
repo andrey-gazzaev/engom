@@ -4,25 +4,19 @@ import { UserSecret } from '../models/user-secret';
 
 import { UserSecretDto } from '../dtos/user-secret.dto';
 
-import { Mapper } from './mappers';
+import { MapperFromDto } from './mappers';
 
 /** User secret mapper. */
 @Injectable({
 	providedIn: 'root',
 })
 export class UserSecretDataMapper
-implements Mapper<UserSecretDto, UserSecret> {
-	/** @inheritdoc */
-	public toDto(model: UserSecret): UserSecretDto {
-		return {
-			token: model.token,
-		};
-	}
+implements MapperFromDto<UserSecretDto, UserSecret> {
 
 	/** @inheritdoc */
 	public fromDto(dto: UserSecretDto): UserSecret {
 		return {
-			token: dto.token,
+			token: dto.data.authenticate.token,
 		};
 	}
 }

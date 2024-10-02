@@ -13,7 +13,9 @@ app.use(
 		graphiql: true,
 		enhanceGraphiql: true,
 		appendPlugins: [require("postgraphile-plugin-connection-filter")],
+		jwtSecret:process.env.JWT_SECRET,
+		jwtPgTypeIdentifier: "public.token"
 	}),
 );
 
-app.listen(5433);
+app.listen(process.env.SERVER_PORT);

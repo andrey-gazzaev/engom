@@ -25,7 +25,6 @@ import { AppUrlsConfig } from './app-urls.config';
  */
 @Injectable({ providedIn: 'root' })
 export class AuthApiService {
-
 	private readonly httpClient = inject(HttpClient);
 
 	private readonly apiUrlsConfig = inject(AppUrlsConfig);
@@ -47,35 +46,17 @@ export class AuthApiService {
 	 * @param loginData Login data.
 	 */
 	public login(loginData: Login): Observable<UserSecret> {
-		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.graphiql.zero,
-			this.loginDataMapper.toDto(loginData),
-		)
-			.pipe(
-				map(response => userSecretDtoSchema.parse(response)),
-				map(secretDto => this.userSecretMapper.fromDto(secretDto)),
-				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(
-					this.loginDataMapper,
-				),
-			);
-	}
-
-	/**
-	 * Refresh user's secret.
-	 * @param secret Secret data.
-	 */
-	public refreshSecret(
-		secret: UserSecret,
-	): Observable<UserSecret> {
-		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.auth.refreshSecret,
-			this.userSecretMapper.toDto(secret),
-		)
-			.pipe(
-				map(response => userSecretDtoSchema.parse(response)),
-				map(secretDto => this.userSecretMapper.fromDto(secretDto)),
-				this.appErrorMapper.catchHttpErrorToAppError(),
-			);
+		const mutation = `mutation {
+			authenticate(input: {email: "${loginData.email}", password: "${loginData.password}"}) {
+				clientMutationId
+				token
+			}
+		}`;
+		return this.httpClient.post<unknown>(this.apiUrlsConfig.graphiql.zero, mutation).pipe(
+			map(response => userSecretDtoSchema.parse(response)),
+			map(secretDto => this.userSecretMapper.fromDto(secretDto)),
+			this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.loginDataMapper),
+		);
 	}
 
 	/**
@@ -84,16 +65,12 @@ export class AuthApiService {
 	 * @returns Success message.
 	 */
 	public resetPassword(data: PasswordReset.Data): Observable<string> {
-		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.auth.resetPassword,
-			this.resetPasswordMapper.toDto(data),
-		)
+		return this.httpClient
+			.post<unknown>(this.apiUrlsConfig.auth.resetPassword, this.resetPasswordMapper.toDto(data))
 			.pipe(
 				map(response => successResponseDtoSchema.parse(response)),
 				map(responseDto => responseDto.detail),
-				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(
-					this.resetPasswordMapper,
-				),
+				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.resetPasswordMapper),
 			);
 	}
 
@@ -102,19 +79,13 @@ export class AuthApiService {
 	 * @param data New passwords data.
 	 * @returns Success message.
 	 */
-	public confirmPasswordReset(
-		data: PasswordReset.Confirmation,
-	): Observable<string> {
-		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.auth.confirmPasswordReset,
-			this.resetPasswordConfirmationMapper.toDto(data),
-		)
+	public confirmPasswordReset(data: PasswordReset.Confirmation): Observable<string> {
+		return this.httpClient
+			.post<unknown>(this.apiUrlsConfig.auth.confirmPasswordReset, this.resetPasswordConfirmationMapper.toDto(data))
 			.pipe(
 				map(response => successResponseDtoSchema.parse(response)),
 				map(responseDto => responseDto.detail),
-				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(
-					this.resetPasswordConfirmationMapper,
-				),
+				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.resetPasswordConfirmationMapper),
 			);
 	}
 
@@ -123,16 +94,12 @@ export class AuthApiService {
 	 * @param data Data required for password changing.
 	 */
 	public changePassword(data: PasswordChange): Observable<void> {
-		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.user.changePassword,
-			this.passwordChangeMapper.toDto(data),
-		)
+		return this.httpClient
+			.post<unknown>(this.apiUrlsConfig.user.changePassword, this.passwordChangeMapper.toDto(data))
 			.pipe(
 				map(response => successResponseDtoSchema.parse(response)),
 				map(() => undefined),
-				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(
-					this.passwordChangeMapper,
-				),
+				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.passwordChangeMapper),
 			);
 	}
 }
