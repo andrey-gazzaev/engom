@@ -9,6 +9,7 @@ CREATE TABLE public."user" (
     last_name varchar(255) NULL,
     email varchar(30) NOT NULL,
     role roles NOT NULL,
+	password_hash varchar(255) NOT NULL,
     created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

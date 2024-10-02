@@ -48,7 +48,7 @@ export class AuthApiService {
 	 */
 	public login(loginData: Login): Observable<UserSecret> {
 		return this.httpClient.post<unknown>(
-			this.apiUrlsConfig.auth.login,
+			this.apiUrlsConfig.graphiql.zero,
 			this.loginDataMapper.toDto(loginData),
 		)
 			.pipe(

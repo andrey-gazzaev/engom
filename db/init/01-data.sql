@@ -1,12 +1,14 @@
 \connect engom;
 
+CREATE EXTENSION pgcrypto;
+
 /* Create some dummy users */
-INSERT INTO public."user" (first_name, last_name, email, role) VALUES
-('Chelsie', 'Stiedemann', 'Omari_Johns17@hotmail.com', 'student'),
-('Delphine', 'Davis', 'Amari.Yundt94@yahoo.com', 'student'),
-('Alda', 'Ankunding', 'Alene10@hotmail.com', 'student'),
-('Briana', 'Johns', 'Arlie_Gerlach@gmail.com', 'teacher'),
-('admin', 'admin', 'admin@engom.com', 'admin');
+INSERT INTO public."user" (first_name, last_name, email, role, password_hash) VALUES
+('Chelsie', 'Stiedemann', 'Omari_Johns17@hotmail.com', 'student',  crypt('student', gen_salt('md5'))),
+('Delphine', 'Davis', 'Amari.Yundt94@yahoo.com', 'student',  crypt('student', gen_salt('md5'))),
+('Alda', 'Ankunding', 'Alene10@hotmail.com', 'student',  crypt('student', gen_salt('md5'))),
+('Briana', 'Johns', 'Arlie_Gerlach@gmail.com', 'teacher',  crypt('teacher', gen_salt('md5'))),
+('admin', 'admin', 'admin@engom.com', 'admin',  crypt('admin', gen_salt('md5')));
 
 /* Create some dummy group*/
 INSERT INTO public.group (name) VALUES
