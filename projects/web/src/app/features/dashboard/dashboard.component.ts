@@ -11,6 +11,8 @@ import { UserApiService } from '@engom/common/core/services/user-api.service';
 import { TaskApiService } from '@engom/common/core/services/task-api.service';
 import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
 
+import { UserGroupsComponent } from './components/user-groups/user-groups.component';
+
 /** Placeholder dashboard. */
 @Component({
 	selector: 'engomw-dashboard',
@@ -18,7 +20,7 @@ import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
 	styleUrls: ['./dashboard.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [MatIconModule, LoadingDirective, RouterLink, AsyncPipe, JsonPipe],
+	imports: [MatIconModule, LoadingDirective, RouterLink, AsyncPipe, JsonPipe, UserGroupsComponent],
 })
 export class DashboardComponent {
 	/** Users service. */

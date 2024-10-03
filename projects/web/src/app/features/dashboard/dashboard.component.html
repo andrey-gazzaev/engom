@@ -4,17 +4,7 @@
 } @else {
 	<main class="dashboard-page">
 
-		<section>
-			<h2>Your groups</h2>
-
-			<ul>
-				@for (group of currentUser.groups; track group.id) {
-					<li>
-						{{ group.name }}
-					</li>
-				}
-			</ul>
-		</section>
+		<engomw-user-groups [groups]="currentUser.groups"/>
 
 		<section>
 			<h2>Your tasks</h2>

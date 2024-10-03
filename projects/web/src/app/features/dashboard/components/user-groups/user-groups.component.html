@@ -1,0 +1,13 @@
+<section>
+	<h2>Your groups</h2>
+
+	<ul>
+		@for (group of groups(); track group.id) {
+			@let selectedGroupValue = selectedGroup();
+			@let currentGroup = selectedGroupValue !== null && selectedGroupValue.id === group.id;
+			<li [class.currentGroup]="currentGroup">
+				{{ group.name }}
+			</li>
+		}
+	</ul>
+</section>
