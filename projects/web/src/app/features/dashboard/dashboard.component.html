@@ -1,31 +1,16 @@
+<header>
+	<button
+		(click)="onLogoutClick()"
+		type="button"
+	>
+		logOut
+	</button>
+</header>
+
+
 @let currentUser = userService.currentUser$ | async;
 @if (currentUser === null) {
-	<main class="login-page">
-		<h1>Welcome, please select a user.</h1>
-
-		@let users = users$ | async;
-		@let isUsersLoading = isLoading$ | async;
-
-		@if (isUsersLoading) {
-			Loading...
-		}
-
-		@if (users !== null) {
-			<ul>
-				@for (user of users; track user.id) {
-					<li>
-						{{ user | engomcFullName }} {{ user.role }}
-						<button
-							type="button"
-							(click)="onUserSelect(user)"
-						>
-							Select
-						</button>
-					</li>
-				}
-			</ul>
-		}
-	</main>
+ Loading current user...
 } @else {
 	<main class="dashboard-page">
 		<h1>Welcome {{ currentUser | engomcFullName }}.</h1>
@@ -51,14 +36,14 @@
 					@for (task of userTasks; track task) {
 						<li>
 							{{ task.description }}
-							<section>
+							<article>
 								<h3>Task dictionary</h3>
 								<ul>
 									@for (vocabulary of task.dictionary; track vocabulary.id) {
 										<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
 									}
 								</ul>
-							</section>
+							</article>
 						</li>
 					}
 				</ul>

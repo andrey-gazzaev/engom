@@ -2,15 +2,14 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular
 import { AppConfig } from '@engom/common/core/services/app.config';
 import { UserService } from '@engom/common/core/services/user.service';
 import { toggleExecutionState } from '@engom/common/core/utils/rxjs/toggle-execution-state';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { BehaviorSubject, switchMap, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LoadingDirective } from '@engom/common/shared/directives/loading.directive';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { UserApiService } from '@engom/common/core/services/user-api.service';
 import { FullNamePipe } from '@engom/common/shared/pipes/fullname.pipe';
-import { User } from '@engom/common/core/models/user';
 import { TaskApiService } from '@engom/common/core/services/task-api.service';
 import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
 
@@ -31,6 +30,8 @@ export class DashboardComponent {
 
 	/** App config service. */
 	protected readonly appConfigService = inject(AppConfig);
+
+	private readonly router = inject(Router);
 
 	private readonly usersApiService = inject(UserApiService);
 
@@ -57,15 +58,11 @@ export class DashboardComponent {
 	protected onLogoutClick(): void {
 		this.userService
 			.logout()
-			.pipe(toggleExecutionState(this.isLoading$), takeUntilDestroyed(this.destroyRef))
+			.pipe(
+				tap(() => this.router.navigate([this.routePaths.auth.children.login.url])),
+				toggleExecutionState(this.isLoading$),
+				takeUntilDestroyed(this.destroyRef),
+			)
 			.subscribe();
-	}
-
-	/**
-	 * Handles a user selection.
-	 * @param user User that will be selected.
-	 */
-	protected onUserSelect(user: User): void {
-		this.userService.selectCurrentUser(user);
 	}
 }

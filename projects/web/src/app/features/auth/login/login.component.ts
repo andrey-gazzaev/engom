@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { LoadingDirective } from '@engom/common/shared/directives/loading.directive';
 import { LabelComponent } from '@engom/common/shared/components/label/label.component';
 import { AsyncPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { injectWebAppRoutes } from '../../shared/web-route-paths';
 
@@ -23,15 +23,10 @@ type LoginFormData = FlatControlsOf<Login>;
 	styleUrls: ['../auth.css', './login.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [
-		ReactiveFormsModule,
-		LabelComponent,
-		RouterLink,
-		LoadingDirective,
-		AsyncPipe,
-	],
+	imports: [ReactiveFormsModule, LabelComponent, RouterLink, LoadingDirective, AsyncPipe],
 })
 export class LoginComponent {
+	private readonly router = inject(Router);
 
 	/** Is app loading. */
 	protected readonly isLoading$ = new BehaviorSubject<boolean>(false);
@@ -48,6 +43,9 @@ export class LoginComponent {
 
 	private readonly destroyRef = inject(DestroyRef);
 
+	/** Route paths. */
+	protected readonly routePaths = injectWebAppRoutes();
+
 	public constructor() {
 		this.loginForm = this.initLoginForm();
 	}
@@ -61,12 +59,16 @@ export class LoginComponent {
 			return;
 		}
 		const loginData = loginSchema.parse(this.loginForm.value);
-		this.userService.login(loginData).pipe(
-			toggleExecutionState(this.isLoading$),
-			catchValidationData(this.loginForm),
-			takeUntilDestroyed(this.destroyRef),
-		)
-			.subscribe();
+		this.userService
+			.login(loginData)
+			.pipe(
+				toggleExecutionState(this.isLoading$),
+				catchValidationData(this.loginForm),
+				takeUntilDestroyed(this.destroyRef),
+			)
+			.subscribe({
+				complete: () => this.router.navigate([this.routePaths.dashboard.url]),
+			});
 	}
 
 	private initLoginForm(): FormGroup<LoginFormData> {
