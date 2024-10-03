@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { HeaderLayoutComponent } from './layouts/header-layout/header-layout.component';
+
 /** Root component. */
 @Component({
 	selector: 'engomw-root',
@@ -8,6 +10,6 @@ import { RouterOutlet } from '@angular/router';
 	styleUrls: ['./app.component.css'],
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [RouterOutlet],
+	imports: [RouterOutlet, HeaderLayoutComponent],
 })
 export class AppComponent {}

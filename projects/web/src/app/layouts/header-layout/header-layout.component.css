@@ -1,0 +1,23 @@
+:host {
+	display: block;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding-inline: 10px;
+
+	background-color: var(--primary-color);
+	color: var(--primary-contrast-color);;
+
+	font-size: 22px;
+}
+
+.header__welcome-text {
+	font-weight: 400;
+}
+
+.header__user-name {
+	font-weight: 600;
+}

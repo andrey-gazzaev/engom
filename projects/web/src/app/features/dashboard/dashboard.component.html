@@ -1,19 +1,8 @@
-<header>
-	<button
-		(click)="onLogoutClick()"
-		type="button"
-	>
-		logOut
-	</button>
-</header>
-
-
 @let currentUser = userService.currentUser$ | async;
 @if (currentUser === null) {
  Loading current user...
 } @else {
 	<main class="dashboard-page">
-		<h1>Welcome {{ currentUser | engomcFullName }}.</h1>
 
 		<section>
 			<h2>Your groups</h2>
