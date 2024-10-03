@@ -1,12 +1,17 @@
-<section>
-	<h2>Your groups</h2>
+<section class="groups-section">
+	<h3 class="visually-hidden">Your groups</h3>
 
-	<ul>
+	<ul class="groups-section__list">
 		@for (group of groups(); track group.id) {
 			@let selectedGroupValue = selectedGroup();
 			@let currentGroup = selectedGroupValue !== null && selectedGroupValue.id === group.id;
 			<li [class.currentGroup]="currentGroup">
-				{{ group.name }}
+				<button
+					mat-button
+					type="button"
+				>
+					{{ group.name }}
+				</button>
 			</li>
 		}
 	</ul>

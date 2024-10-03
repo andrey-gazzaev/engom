@@ -14,5 +14,13 @@
 
 .dashboard-page {
 	display: flex;
+	flex-direction: row;
+	gap: 25px;
+}
+
+.dashboard-page__content {
+	display: flex;
 	flex-direction: column;
+	gap: 25px;
+	flex: 1;
 }

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { MatButton } from '@angular/material/button';
 import { Group } from '@engom/common/core/models/group';
 
 /** User groups component. */
@@ -8,6 +9,7 @@ import { Group } from '@engom/common/core/models/group';
 	templateUrl: 'user-groups.component.html',
 	standalone: true,
 	changeDetection: ChangeDetectionStrategy.OnPush,
+	imports: [MatButton],
 })
 export class UserGroupsComponent {
 

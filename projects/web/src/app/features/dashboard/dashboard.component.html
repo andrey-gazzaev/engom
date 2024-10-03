@@ -1,34 +1,40 @@
 @let currentUser = userService.currentUser$ | async;
 @if (currentUser === null) {
- Loading current user...
+	Loading current user...
 } @else {
-	<main class="dashboard-page">
+	<section class="dashboard-page">
+		<engomw-user-groups
+			class="dashboard-page__sidebar"
+			[groups]="currentUser.groups"
+		/>
 
-		<engomw-user-groups [groups]="currentUser.groups"/>
+		<div class="dashboard-page__content">
+			<h2>User dashboard</h2>
 
-		<section>
-			<h2>Your tasks</h2>
+			<section>
+				<h3>Your tasks</h3>
 
-			@let userTasks = userTasks$ | async;
-			@if (userTasks !== null) {
-				<ul>
-					@for (task of userTasks; track task) {
-						<li>
-							{{ task.description }}
-							<article>
-								<h3>Task dictionary</h3>
-								<ul>
-									@for (vocabulary of task.dictionary; track vocabulary.id) {
-										<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
-									}
-								</ul>
-							</article>
-						</li>
-					}
-				</ul>
-			} @else {
-				<p>No tasks</p>
-			}
-		</section>
-	</main>
+				@let userTasks = userTasks$ | async;
+				@if (userTasks !== null) {
+					<ul>
+						@for (task of userTasks; track task) {
+							<li>
+								{{ task.description }}
+								<article>
+									<h3>Task dictionary</h3>
+									<ul>
+										@for (vocabulary of task.dictionary; track vocabulary.id) {
+											<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
+										}
+									</ul>
+								</article>
+							</li>
+						}
+					</ul>
+				} @else {
+					<p>No tasks</p>
+				}
+			</section>
+		</div>
+	</section>
 }
