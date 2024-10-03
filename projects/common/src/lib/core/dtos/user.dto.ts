@@ -40,3 +40,13 @@ export const usersDtoSchema = z.object({
 
 /** Users DTO. */
 export type UsersDto = Readonly<z.infer<typeof usersDtoSchema>>;
+
+/** User profile DTO schema. */
+export const userProfileDtoSchema = z.object({
+	data: z.object({
+		userProfile: userDtoSchema,
+	}),
+});
+
+/** User profile DTO. */
+export type UserProfileDto = Readonly<z.infer<typeof userProfileDtoSchema>>;

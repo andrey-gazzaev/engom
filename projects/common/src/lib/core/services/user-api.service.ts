@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 import { User } from '../models/user';
 
 import { UserMapper } from '../mappers/user.mapper';
-import { userDtoSchema, usersDtoSchema } from '../dtos/user.dto';
+import { userProfileDtoSchema, usersDtoSchema } from '../dtos/user.dto';
 
 import { AppUrlsConfig } from './app-urls.config';
 
@@ -51,12 +51,32 @@ export class UserApiService {
 
 	/** Returns current user info.*/
 	public getCurrentUser(): Observable<User> {
-		return this.httpClient.get<unknown>(
-			this.apiUrls.user.currentProfile,
+		const query = `query {
+			userProfile {
+				id
+					firstName
+					lastName
+					role
+					email
+					createdDate
+					groupusersByUserId {
+						nodes {
+							groupByGroupId {
+								id
+								name
+							}
+						}
+					}
+			}
+		}`;
+
+		return this.httpClient.post<unknown>(
+			this.apiUrls.graphiql.zero,
+			{ query, operationName: null, variables: null },
 		)
 			.pipe(
-				map(response => userDtoSchema.parse(response)),
-				map(userDto => this.userMapper.fromDto(userDto)),
+				map(response => userProfileDtoSchema.parse(response)),
+				map(userDto => this.userMapper.fromDto(userDto.data.userProfile)),
 			);
 	}
 }

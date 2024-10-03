@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, first, ignoreElements, map, merge, Observable, OperatorFunction, pipe, shareReplay, switchMap } from 'rxjs';
+import { first, ignoreElements, map, merge, Observable, of, OperatorFunction, pipe, shareReplay, switchMap } from 'rxjs';
 
 import { Login } from '../models/login';
 import { PasswordReset } from '../models/password-reset';
@@ -8,6 +8,7 @@ import { UserSecret } from '../models/user-secret';
 
 import { AuthApiService } from './auth-api.service';
 import { UserSecretStorageService } from './user-secret-storage.service';
+import { UserApiService } from './user-api.service';
 
 /**
  * Stateful service for storing/managing information about the current user.
@@ -27,13 +28,11 @@ export class UserService {
 
 	private readonly userSecretStorage = inject(UserSecretStorageService);
 
-	// private readonly userApiService = inject(UserApiService);
-
-	private readonly _currentUser$ = new BehaviorSubject<User | null>(null);
+	private readonly userApiService = inject(UserApiService);
 
 	public constructor() {
 		this.currentUser$ = this.initCurrentUserStream();
-		this.isAuthorized$ = this._currentUser$.pipe(map(user => user != null));
+		this.isAuthorized$ = this.currentUser$.pipe(map(user => user != null));
 	}
 
 	/**
@@ -71,14 +70,6 @@ export class UserService {
 		return this.authService.confirmPasswordReset(data);
 	}
 
-	/**
-	 * Selects specified user as the current user.
-	 * @param user User will be the current user.
-	 */
-	public selectCurrentUser(user: User): void {
-		this._currentUser$.next(user);
-	}
-
 	private saveSecretAndWaitForAuthorized(): OperatorFunction<UserSecret, void> {
 		return pipe(
 			switchMap(secret => {
@@ -96,7 +87,7 @@ export class UserService {
 
 	private initCurrentUserStream(): Observable<User | null> {
 		return this.userSecretStorage.currentSecret$.pipe(
-			switchMap(_ => this._currentUser$),
+			switchMap(secret => (secret ? this.userApiService.getCurrentUser() : of(null))),
 			shareReplay({ bufferSize: 1, refCount: false }),
 		);
 	}

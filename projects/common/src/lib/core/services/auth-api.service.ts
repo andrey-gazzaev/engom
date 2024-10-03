@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 import { Login } from '../models/login';
 import { PasswordChange } from '../models/password-change';
@@ -48,15 +48,21 @@ export class AuthApiService {
 	public login(loginData: Login): Observable<UserSecret> {
 		const mutation = `mutation {
 			authenticate(input: {email: "${loginData.email}", password: "${loginData.password}"}) {
-				clientMutationId
 				token
 			}
 		}`;
-		return this.httpClient.post<unknown>(this.apiUrlsConfig.graphiql.zero, mutation).pipe(
-			map(response => userSecretDtoSchema.parse(response)),
-			map(secretDto => this.userSecretMapper.fromDto(secretDto)),
-			this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.loginDataMapper),
-		);
+		return this.httpClient
+			.post<unknown>(this.apiUrlsConfig.graphiql.zero, { query: mutation, operationName: null, variables: null })
+			.pipe(
+				map(response => userSecretDtoSchema.parse(response)),
+				tap(secret => {
+					if (secret.data.authenticate.token == null) {
+						throw new Error('Authorization error');
+					}
+				}),
+				map(secretDto => this.userSecretMapper.fromDto(secretDto)),
+				this.appErrorMapper.catchHttpErrorToAppErrorWithValidationSupport(this.loginDataMapper),
+			);
 	}
 
 	/**

@@ -5,7 +5,7 @@ export const userSecretDtoSchema = z.object({
 	data: z.object({
 		authenticate: z.object({
 			/** Access token. */
-			token: z.string(),
+			token: z.string().nullable(),
 		}),
 	}),
 }).strict();

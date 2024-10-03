@@ -30,3 +30,17 @@ begin
   end if;
 end;
 $$ language plpgsql strict security definer;
+
+create function current_user_id() returns integer as $$
+  select nullif(current_setting('jwt.claims.user_id', true), '')::integer;
+$$ language sql stable;
+
+CREATE FUNCTION public.user_profile() RETURNS public."user" AS $$
+SELECT
+  *
+FROM
+  public."user"
+WHERE
+  id = current_user_id();
+
+$$ language SQL stable;

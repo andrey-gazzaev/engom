@@ -4,7 +4,7 @@ import { z } from 'zod';
 export const userSecretSchema = z.object({
 
 	/** Access token. */
-	token: z.string(),
+	token: z.string().nullable(),
 }).strict();
 
 /** User secret. */

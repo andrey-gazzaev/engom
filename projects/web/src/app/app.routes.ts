@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from '@engom/common/core/guards/auth-guard';
 
 import { webRoutePaths } from './features/shared/web-route-paths';
 
@@ -54,11 +55,13 @@ export const appRoutes: Routes = [
 	},
 	{
 		path: webRoutePaths.auth.path,
+		canActivate: [authGuard({ isAuthorized: false })],
 		loadChildren: () =>
 			import('./features/auth/auth.routes').then(r => r.authRoutes),
 	},
 	{
 		path: webRoutePaths.dashboard.path,
+		canActivate: [authGuard({ isAuthorized: true })],
 		loadChildren: () =>
 			import('./features/dashboard/dashboard.routes').then(
 				r => r.dashboardRoutes,

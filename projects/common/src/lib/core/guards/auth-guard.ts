@@ -2,6 +2,7 @@ import { map } from 'rxjs';
 import { CanMatchFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { UserService } from '@engom/common/core/services/user.service';
+import { webRoutePaths } from 'projects/web/src/app/features/shared/web-route-paths';
 
 type AuthGuardParams = {
 
@@ -25,10 +26,10 @@ export function authGuard({ isAuthorized }: AuthGuardParams): CanMatchFn {
 		return userService.isAuthorized$.pipe(
 			map(isUserAuthorized => {
 				if (isAuthorized) {
-					return isUserAuthorized ? true : router.parseUrl('/');
+					return isUserAuthorized ? true : router.parseUrl(webRoutePaths.auth.path);
 				}
 
-				return isUserAuthorized ? router.parseUrl('/') : true;
+				return isUserAuthorized ? router.parseUrl(webRoutePaths.dashboard.path) : true;
 			}),
 		);
 	};
