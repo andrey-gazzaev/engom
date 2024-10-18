@@ -1,0 +1,30 @@
+:host {
+	display: flex;
+	height: 100vh;
+}
+
+.login-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+	gap: 20px;
+	flex: 1;
+}
+
+.dashboard-page {
+	display: flex;
+	flex-direction: row;
+	gap: 25px;
+}
+
+.dashboard-page__content {
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	flex: 1;
+}
+
+.dashboard-page__sidebar {
+	border-right: 2px solid var(--primary-color);
+}
