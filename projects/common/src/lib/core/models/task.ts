@@ -11,4 +11,7 @@ export type Task = {
 
 	/** Dictionary. */
 	readonly dictionary: readonly Vocabulary[];
+
+	/** Is completed. */
+	readonly isCompleted: boolean;
 };

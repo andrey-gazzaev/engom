@@ -1,0 +1,39 @@
+<ul class="list card-list">
+	@for (task of tasks(); track task.id) {
+		<li class="card-list__item">
+			<article>
+				<h4># {{ task.id + 1 }}</h4>
+				<p>
+					{{ task.description }}
+					@if (task.isCompleted) {
+						<span class="completed">Completed</span>
+					}
+				</p>
+
+				<ul class="list">
+					@for (vocabulary of task.dictionary; track vocabulary.id) {
+						<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
+					}
+				</ul>
+
+				@if (task.isCompleted) {
+					<button
+						type="button"
+						(click)="onUncompleteClick(task)"
+					>
+						Uncomplete
+					</button>
+				} @else {
+					<button
+						type="button"
+						(click)="onCompleteClick(task)"
+					>
+						Complete
+					</button>
+				}
+			</article>
+		</li>
+	} @empty {
+		<li>No tasks</li>
+	}
+</ul>

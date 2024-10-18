@@ -58,8 +58,48 @@ export class TaskApiService {
 				map(response => tasksByUserIdDtoSchema.parse(response)),
 				map(usersDto =>
 					usersDto.data.allUsers.nodes
-						.map(userDto => userDto.usertasksByUserId.nodes.map(taskDto => this.taskMapper.fromDto(taskDto.taskByTaskId)))
+						.map(userDto =>
+							userDto.usertasksByUserId.nodes.map(taskDto =>
+								this.taskMapper.fromDto({ ...taskDto.taskByTaskId, completedAt: taskDto.completedat })))
 						.flat()),
 			);
+	}
+
+	/**
+	 * Completes user's task by task Id.
+	 * @param userId ID of the user who owns the task.
+	 * @param taskId ID of the task to be completed.
+	 */
+	public completeTask(userId: User['id'], taskId: Task['id']): Observable<void> {
+		const mutation = `mutation {
+			completedTask(input: {taskId: ${taskId}, userId: ${userId}}) {
+				clientMutationId
+			}
+		}`;
+
+		return this.httpClient
+			.post<unknown>(this.apiUrls.graphiql.zero, {
+			query: mutation,
+		})
+			.pipe(map(() => undefined));
+	}
+
+	/**
+	 * Uncompletes user's task by task Id.
+	 * @param userId ID of the user who owns the task.
+	 * @param taskId ID of the task to be uncompleted.
+	 */
+	public uncompleteTask(userId: User['id'], taskId: Task['id']): Observable<void> {
+		const mutation = `mutation {
+			uncompletedTask(input: {taskId: ${taskId}, userId: ${userId}}) {
+				clientMutationId
+			}
+		}`;
+
+		return this.httpClient
+			.post<unknown>(this.apiUrls.graphiql.zero, {
+			query: mutation,
+		})
+			.pipe(map(() => undefined));
 	}
 }

@@ -40,7 +40,7 @@ CREATE TABLE public.task (
 CREATE TABLE public.groupTask (
     task_id INTEGER REFERENCES public.task (id),
     group_id INTEGER REFERENCES public.group (id),
-    lastSentAt TIMESTAMP DEFAULT NULL,
+    lastSentAt TIMESTAMP NULL DEFAULT NULL,
     primary key (task_id, group_id)
 );
 
@@ -48,7 +48,7 @@ CREATE TABLE public.groupTask (
 CREATE TABLE public.userTask (
     task_id INTEGER REFERENCES public.task (id),
     user_id INTEGER REFERENCES public."user" (id),
-    completedAt TIMESTAMP DEFAULT NULL,
+    completedAt TIMESTAMP NULL DEFAULT NULL,
     primary key (user_id, task_id)
 );
 

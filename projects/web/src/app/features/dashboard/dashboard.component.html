@@ -16,23 +16,7 @@
 
 				@let userTasks = userTasks$ | async;
 				@if (userTasks !== null) {
-					<ul>
-						@for (task of userTasks; track task) {
-							<li>
-								{{ task.description }}
-								<article>
-									<h3>Task dictionary</h3>
-									<ul>
-										@for (vocabulary of task.dictionary; track vocabulary.id) {
-											<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
-										}
-									</ul>
-								</article>
-							</li>
-						}
-					</ul>
-				} @else {
-					<p>No tasks</p>
+					<engomw-tasks [tasks]="userTasks" (completeClicked)="onCompleteTaskClick($event)" (uncompleteClicked)="onUncompleteTaskClick($event)"/>
 				}
 			</section>
 		</div>

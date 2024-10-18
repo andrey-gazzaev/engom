@@ -42,7 +42,7 @@ INSERT INTO public.groupTask (task_id, group_id, lastSentAt) VALUES
 
 INSERT INTO public.userTask (task_id, user_id, completedAt) VALUES
 (1, 1, null),
-(2, 1, null),
+(2, 1, make_date(2024, 10, 17)),
 (3, 2, null),
 (4, 1, null),
 (4, 2, null),

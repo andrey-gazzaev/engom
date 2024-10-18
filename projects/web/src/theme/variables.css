@@ -22,4 +22,8 @@
 	--background-contrast-color: black;
 
 	--error-color: red;
+
+	--base-space: 2px;
+
+	--space-5: calc(var(--base-space) * 5); /* 10px */
 }

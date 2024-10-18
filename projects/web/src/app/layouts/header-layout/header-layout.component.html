@@ -5,7 +5,7 @@
 		Welcome
 		<span class="header__user-name">
 			@if (currentUser !== null) {
-				{{ currentUser | engomcFullName }}.
+				{{ currentUser | engomcFullName }} ({{ currentUser.role }}).
 			}
 		</span>
 	</p>
