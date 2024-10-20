@@ -27,6 +27,9 @@ export const webRoutePaths = buildRoutePaths({
 			student: {
 				path: 'student',
 			},
+			teacher: {
+				path: 'teacher',
+			},
 		},
 	},
 	auth: {

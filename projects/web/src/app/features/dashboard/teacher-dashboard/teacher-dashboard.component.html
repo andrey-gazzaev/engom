@@ -1,0 +1,23 @@
+@let currentUser = userService.currentUser$ | async;
+@if (currentUser === null) {
+	Loading current user...
+} @else {
+	<section class="dashboard-page">
+		<engomw-user-groups
+			class="dashboard-page__sidebar"
+			[groups]="currentUser.groups"
+			[selectedGroup]="selectedGroup()"
+			(groupClicked)="onGroupClick($event)"
+		/>
+
+		<div></div>
+		<div class="dashboard-page__content">
+			@let selectedGroupValue = selectedGroup();
+			@if (selectedGroupValue === null) {
+				Please select group
+			} @else {
+				<h2>{{ selectedGroupValue.name }}</h2>
+			}
+		</div>
+	</section>
+}

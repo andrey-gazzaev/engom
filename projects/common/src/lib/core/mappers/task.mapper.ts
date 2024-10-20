@@ -8,7 +8,7 @@ import { VocabularyMapper } from './vocabulary.mapper';
 
 /** Task mapper. */
 @Injectable({ providedIn: 'root' })
-export class TaskMapper implements MapperFromDto<TaskDto & { completedAt: string | null;}, Task> {
+export class TaskMapper implements MapperFromDto<TaskDto, Task> {
 	private readonly vocabularyMapper = inject(VocabularyMapper);
 
 	/** @implements */
@@ -18,7 +18,6 @@ export class TaskMapper implements MapperFromDto<TaskDto & { completedAt: string
 			description: dto.description,
 			dictionary: dto.vocabularytasksByTaskId.nodes.map(vocabulary =>
 				this.vocabularyMapper.fromDto(vocabulary.vocabularyByVocabularyId)),
-			isCompleted: dto.completedAt != null,
 		};
 	}
 }

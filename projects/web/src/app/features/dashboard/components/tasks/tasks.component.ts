@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, model, output } from '@angular/core';
 
-import { Task } from '@engom/common/core/models/task';
+import { UserTask } from '@engom/common/core/models/user-task';
 
 /** Tasks component. */
 @Component({
@@ -12,19 +12,19 @@ import { Task } from '@engom/common/core/models/task';
 })
 export class TasksComponent {
 	/** Tasks. */
-	public readonly tasks = model<readonly Task[]>([]);
+	public readonly tasks = model<readonly UserTask[]>([]);
 
 	/** Emits when uncomplete button is clicked. */
-	public readonly uncompleteClicked = output<Task>();
+	public readonly uncompleteClicked = output<UserTask>();
 
 	/** Emits when complete button is clicked. */
-	public readonly completeClicked = output<Task>();
+	public readonly completeClicked = output<UserTask>();
 
 	/**
 	 * Handles a click on the uncomplete button.
 	 * @param task Task to be uncompleted.
 	 */
-	protected onUncompleteClick(task: Task): void {
+	protected onUncompleteClick(task: UserTask): void {
 		this.uncompleteClicked.emit(task);
 	}
 
@@ -32,7 +32,7 @@ export class TasksComponent {
 	 * Handles a click on the complete button.
 	 * @param task Task to be completed.
 	 */
-	protected onCompleteClick(task: Task): void {
+	protected onCompleteClick(task: UserTask): void {
 		this.completeClicked.emit(task);
 	}
 }

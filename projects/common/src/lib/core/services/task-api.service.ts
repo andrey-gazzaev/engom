@@ -5,9 +5,9 @@ import { map, Observable } from 'rxjs';
 
 import { User } from '../models/user';
 import { Task } from '../models/task';
-
 import { tasksByUserIdDtoSchema } from '../dtos/task';
-import { TaskMapper } from '../mappers/task.mapper';
+import { UserTask } from '../models/user-task';
+import { UserTaskMapper } from '../mappers/user-task.mapper';
 
 import { AppUrlsConfig } from './app-urls.config';
 
@@ -18,13 +18,13 @@ export class TaskApiService {
 
 	private readonly httpClient = inject(HttpClient);
 
-	private readonly taskMapper = inject(TaskMapper);
+	private readonly userTaskMapper = inject(UserTaskMapper);
 
 	/**
 	 * Gets tasks of the specified user.
 	 * @param userId User ID by which tasks will be got.
 	 */
-	public getTasksByUserId(userId: User['id']): Observable<Task[]> {
+	public getUserTasksByUserId(userId: User['id']): Observable<UserTask[]> {
 		const query = `{
 			allUsers(condition: {id: ${userId}}) {
 				nodes {
@@ -60,7 +60,7 @@ export class TaskApiService {
 					usersDto.data.allUsers.nodes
 						.map(userDto =>
 							userDto.usertasksByUserId.nodes.map(taskDto =>
-								this.taskMapper.fromDto({ ...taskDto.taskByTaskId, completedAt: taskDto.completedat })))
+								this.userTaskMapper.fromDto({ ...taskDto.taskByTaskId, completedAt: taskDto.completedat })))
 						.flat()),
 			);
 	}

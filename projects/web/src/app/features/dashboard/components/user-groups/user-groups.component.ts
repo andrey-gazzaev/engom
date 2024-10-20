@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model, output } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { Group } from '@engom/common/core/models/group';
 
@@ -18,4 +18,15 @@ export class UserGroupsComponent {
 
 	/** Selected group. */
 	public readonly selectedGroup = model<Group | null>(null);
+
+	/** Emits when group button is clicked. */
+	public readonly groupClicked = output<Group>();
+
+	/**
+	 * Handles clicks on a group button.
+	 * @param group Group.
+	 */
+	protected onGroupButtonClick(group: Group): void {
+		this.groupClicked.emit(group);
+	}
 }

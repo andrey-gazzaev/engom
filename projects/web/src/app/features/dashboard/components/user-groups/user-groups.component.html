@@ -4,11 +4,12 @@
 	<ul class="groups-section__list">
 		@for (group of groups(); track group.id) {
 			@let selectedGroupValue = selectedGroup();
-			@let currentGroup = selectedGroupValue !== null && selectedGroupValue.id === group.id;
-			<li [class.currentGroup]="currentGroup">
+			@let isCurrentGroup = selectedGroupValue !== null && selectedGroupValue.id === group.id;
+			<li [class.current-group]="isCurrentGroup">
 				<button
 					mat-button
 					type="button"
+					(click)="onGroupButtonClick(group)"
 				>
 					{{ group.name }}
 				</button>
