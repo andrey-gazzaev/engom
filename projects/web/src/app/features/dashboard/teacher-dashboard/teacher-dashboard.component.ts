@@ -3,6 +3,11 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Group } from '@engom/common/core/models/group';
 import { UserService } from '@engom/common/core/services/user.service';
 import { AsyncPipe, JsonPipe } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { map, switchMap } from 'rxjs';
+import { UserApiService } from '@engom/common/core/services/user-api.service';
+import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
+import { FullNamePipe } from '@engom/common/shared/pipes/fullname.pipe';
 
 import { UserGroupsComponent } from '../components/user-groups/user-groups.component';
 
@@ -13,14 +18,25 @@ import { UserGroupsComponent } from '../components/user-groups/user-groups.compo
 	styleUrl: 'teacher-dashboard.component.css',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [UserGroupsComponent, AsyncPipe, JsonPipe],
+	imports: [UserGroupsComponent, AsyncPipe, JsonPipe, FullNamePipe],
 })
 export class TeacherDashboardComponent {
 	/** @see {@link UserService}. */
 	protected readonly userService = inject(UserService);
 
+	private readonly userApiService = inject(UserApiService);
+
 	/** Selected group. */
 	protected readonly selectedGroup = signal<Group | null>(null);
+
+	private readonly selectedGroup$ = toObservable(this.selectedGroup);
+
+	/** Teacher selected users group. */
+	protected readonly groupUsers$ = this.selectedGroup$.pipe(
+		filterNull(),
+		switchMap(selectedGroup => this.userApiService.getUsersByGroup(selectedGroup)),
+		map(users => users.filter(({ role }) => role !== 'teacher')),
+	);
 
 	/**
 	 * Handles clicks on a group.

@@ -50,3 +50,12 @@ export const userProfileDtoSchema = z.object({
 
 /** User profile DTO. */
 export type UserProfileDto = Readonly<z.infer<typeof userProfileDtoSchema>>;
+
+/** Users group DTO schema. */
+export const groupUsersDtoSchema = z.object({
+	data: z.object({
+		allGroups: createNodesDtoSchema(
+			z.object({ groupusersByGroupId: createNodesDtoSchema(z.object({ userByUserId: userDtoSchema })) }),
+		),
+	}),
+});

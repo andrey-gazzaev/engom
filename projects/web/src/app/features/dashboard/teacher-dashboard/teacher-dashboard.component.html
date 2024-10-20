@@ -17,6 +17,15 @@
 				Please select group
 			} @else {
 				<h2>{{ selectedGroupValue.name }}</h2>
+
+				<p>Your students</p>
+
+				@let groupUsers = groupUsers$ | async;
+				<ul>
+					@for (user of groupUsers; track user.id) {
+						<li>{{user | engomcFullName }}</li>
+					}
+				</ul>
 			}
 		</div>
 	</section>
