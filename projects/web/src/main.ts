@@ -23,5 +23,4 @@ bootstrapApplication(AppComponent, {
 		provideRouter(appRoutes),
 		provideWebAppRoutes(),
 	],
-})
-	.catch(err => console.error(err));
+}).catch(err => console.error(err));

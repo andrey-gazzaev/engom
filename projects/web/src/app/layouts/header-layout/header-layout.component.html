@@ -1,21 +1,19 @@
 @let currentUser = userService.currentUser$ | async;
 
 <header class="header">
-	<p class="header__welcome-text">
-		Welcome
-		<span class="header__user-name">
-			@if (currentUser !== null) {
-				{{ currentUser | engomcFullName }} ({{ currentUser.role }}).
-			}
-		</span>
-	</p>
+	@if (currentUser !== null) {
+		<p class="header__welcome-text">
+			Welcome
+			<span class="header__user-name">{{ currentUser | engomcFullName }} ({{ currentUser.role }}).</span>
+		</p>
 
-	<button
-		mat-icon-button
-		(click)="onLogoutClick()"
-		type="button"
-		title="logout"
-	>
-		<mat-icon>logout</mat-icon>
-	</button>
+		<button
+			mat-icon-button
+			(click)="onLogoutClick()"
+			type="button"
+			title="logout"
+		>
+			<mat-icon>logout</mat-icon>
+		</button>
+	}
 </header>
