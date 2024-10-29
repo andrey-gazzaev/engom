@@ -40,3 +40,17 @@ export const tasksByUserIdDtoSchema = z.object({
 
 /** Tasks by user ID DTO. */
 export type TasksByUserIdDto = Readonly<z.infer<typeof tasksByUserIdDtoSchema>>;
+
+/** Tasks by user ID DTO schema. */
+export const groupTasksDtoSchema = z.object({
+	data: z.object({
+		allGrouptasks: createNodesDtoSchema(
+			z.object({
+				taskByTaskId: taskDtoSchema,
+			}),
+		),
+	}),
+});
+
+/** Tasks by user ID DTO. */
+export type GroupTasksDto = Readonly<z.infer<typeof groupTasksDtoSchema>>;

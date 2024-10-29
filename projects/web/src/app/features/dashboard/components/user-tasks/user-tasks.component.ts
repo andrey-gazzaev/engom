@@ -2,17 +2,17 @@ import { ChangeDetectionStrategy, Component, model, output } from '@angular/core
 
 import { UserTask } from '@engom/common/core/models/user-task';
 
-/** Tasks component. */
+/** User tasks component. */
 @Component({
-	selector: 'engomw-tasks',
-	templateUrl: 'tasks.component.html',
-	styleUrl: 'tasks.component.css',
+	selector: 'engomw-user-tasks',
+	templateUrl: 'user-tasks.component.html',
+	styleUrl: 'user-tasks.component.css',
 	standalone: true,
 	changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksComponent {
+export class UserTasksComponent {
 	/** Tasks. */
-	public readonly tasks = model<readonly UserTask[]>([]);
+	public readonly tasks = model<UserTask[]>([]);
 
 	/** Emits when uncomplete button is clicked. */
 	public readonly uncompleteClicked = output<UserTask>();

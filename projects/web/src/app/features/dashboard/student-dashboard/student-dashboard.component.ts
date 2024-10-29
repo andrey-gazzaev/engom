@@ -14,7 +14,7 @@ import { BehaviorSubject, Subject, startWith, switchMap, take, tap } from 'rxjs'
 
 import { Task } from '@engom/common/core/models/task';
 
-import { TasksComponent } from '../components/tasks/tasks.component';
+import { UserTasksComponent } from '../components/user-tasks/user-tasks.component';
 import { UserGroupsComponent } from '../components/user-groups/user-groups.component';
 
 /** Student dashboard component. */
@@ -24,7 +24,7 @@ import { UserGroupsComponent } from '../components/user-groups/user-groups.compo
 	styleUrl: 'student-dashboard.component.css',
 	standalone: true,
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	imports: [MatIconModule, LoadingDirective, RouterLink, AsyncPipe, JsonPipe, UserGroupsComponent, TasksComponent],
+	imports: [MatIconModule, LoadingDirective, RouterLink, AsyncPipe, JsonPipe, UserGroupsComponent, UserTasksComponent],
 })
 export class StudentDashboardComponent {
 	/** Users service. */

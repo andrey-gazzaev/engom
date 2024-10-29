@@ -12,7 +12,7 @@ export class TaskMapper implements MapperFromDto<TaskDto, Task> {
 	private readonly vocabularyMapper = inject(VocabularyMapper);
 
 	/** @implements */
-	public fromDto(dto: TaskDto & { completedAt: string | null; }): Task {
+	public fromDto(dto: TaskDto): Task {
 		return {
 			id: dto.id,
 			description: dto.description,

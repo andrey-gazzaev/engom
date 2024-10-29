@@ -8,7 +8,7 @@
 			[groups]="currentUser.groups"
 		/>
 
-		<div ></div>
+		<div></div>
 		<div class="dashboard-page__content">
 			<h2>User dashboard</h2>
 
@@ -17,7 +17,11 @@
 
 				@let userTasks = userTasks$ | async;
 				@if (userTasks !== null) {
-					<engomw-tasks [tasks]="userTasks" (completeClicked)="onCompleteTaskClick($event)" (uncompleteClicked)="onUncompleteTaskClick($event)"/>
+					<engomw-user-tasks
+						[tasks]="userTasks"
+						(completeClicked)="onCompleteTaskClick($event)"
+						(uncompleteClicked)="onUncompleteTaskClick($event)"
+					/>
 				}
 			</section>
 		</div>

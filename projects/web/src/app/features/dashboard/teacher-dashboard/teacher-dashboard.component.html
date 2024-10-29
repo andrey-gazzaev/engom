@@ -16,16 +16,34 @@
 			@if (selectedGroupValue === null) {
 				Please select group
 			} @else {
-				<h2>{{ selectedGroupValue.name }}</h2>
+				<section>
+					<h2>{{ selectedGroupValue.name }}</h2>
 
-				<p>Your students</p>
+					<p>Your students</p>
 
-				@let groupUsers = groupUsers$ | async;
-				<ul>
-					@for (user of groupUsers; track user.id) {
-						<li>{{user | engomcFullName }}</li>
-					}
-				</ul>
+					@let groupUsers = groupUsers$ | async;
+					<ul>
+						@for (user of groupUsers; track user.id) {
+							<li>{{ user | engomcFullName }}</li>
+						}
+					</ul>
+				</section>
+
+				<section>
+					<h2>{{ selectedGroupValue.name }} Tasks</h2>
+
+					@let groupTasks = groupTasks$ | async;
+					<ul>
+						@for (task of groupTasks; track task.id) {
+							<li>
+								<article>
+									<h3>{{ task.id + 1 }}</h3>
+									<p>{{ task.description }}</p>
+								</article>
+							</li>
+						}
+					</ul>
+				</section>
 			}
 		</div>
 	</section>

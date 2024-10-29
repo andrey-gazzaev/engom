@@ -57,7 +57,7 @@ export class UserApiService {
 	 * Gets users by a group.
 	 * @param group Group.
 	 */
-	public getUsersByGroup(group: Group): Observable<User[]> {
+	public getGroupUsers(group: Group): Observable<User[]> {
 		const query = `{
 			allGroups(condition: {id: ${group.id}}) {
 				nodes {
