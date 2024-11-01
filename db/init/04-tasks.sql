@@ -36,5 +36,3 @@ create function available_group_tasks(
 		where available_group_tasks.group_id = gt.group_id
 	);
 $$ language sql stable;
-
-

@@ -23,28 +23,11 @@
 					[isLoading]="isStudentsLoading$ | async"
 				/>
 
-				<section>
-					<h2>{{ selectedGroupValue.name }} Tasks</h2>
-
-					@let groupTasks = groupTasks$ | async;
-					<ul>
-						@for (task of groupTasks; track task.id) {
-							<li>
-								<article>
-									<h3>{{ task.id + 1 }}</h3>
-									<p>{{ task.description }}</p>
-								</article>
-							</li>
-						}
-					</ul>
-
-					<button
-						(click)="onAssignTaskClick()"
-						type="button"
-					>
-						Assign task
-					</button>
-				</section>
+				<engomw-group-tasks
+					[items]="groupTasks$ | async"
+					[isLoading]="isGroupTasksLoading$ | async"
+					(assignTaskClicked)="onAssignTaskClick()"
+				/>
 			}
 		</div>
 	</section>

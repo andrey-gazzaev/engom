@@ -18,6 +18,7 @@ import { UserTasksComponent } from '../components/user-tasks/user-tasks.componen
 import { AssignTaskDialogComponent } from '../components/assign-task-dialog/assign-task-dialog.component';
 
 import { GroupStudentsComponent } from './group-students/group-students.component';
+import { GroupTasksComponent } from './group-tasks/group-tasks.component';
 
 /** Teacher dashboard component. */
 @Component({
@@ -26,7 +27,14 @@ import { GroupStudentsComponent } from './group-students/group-students.componen
 	styleUrl: 'teacher-dashboard.component.css',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	standalone: true,
-	imports: [UserGroupsComponent, AsyncPipe, FullNamePipe, UserTasksComponent, GroupStudentsComponent],
+	imports: [
+		UserGroupsComponent,
+		AsyncPipe,
+		FullNamePipe,
+		UserTasksComponent,
+		GroupStudentsComponent,
+		GroupTasksComponent,
+	],
 })
 export class TeacherDashboardComponent {
 	/** @see {@link UserService}. */
@@ -49,20 +57,24 @@ export class TeacherDashboardComponent {
 	/** Group students. */
 	protected readonly students$ = this.selectedGroup$.pipe(
 		filterNull(),
-		switchMap(selectedGroup => this.userApiService.getGroupUsers(selectedGroup).pipe(
-			toggleExecutionState(this.isStudentsLoading$),
-		)),
+		switchMap(selectedGroup =>
+			this.userApiService.getGroupUsers(selectedGroup).pipe(toggleExecutionState(this.isStudentsLoading$))),
 		map(users => users.filter(({ role }) => role !== 'teacher')),
 	);
 
 	private readonly refreshGroupTasks$ = new Subject<void>();
+
+	/** Is group tasks loading. */
+	protected readonly isGroupTasksLoading$ = new BehaviorSubject(false);
 
 	/** Group tasks. */
 	protected readonly groupTasks$ = this.refreshGroupTasks$.pipe(
 		startWith(null),
 		switchMap(() => this.selectedGroup$),
 		filterNull(),
-		switchMap(selectedGroup => this.taskApiService.getGroupTasks(selectedGroup)),
+		switchMap(selectedGroup => this.taskApiService.getGroupTasks(selectedGroup).pipe(
+			toggleExecutionState(this.isGroupTasksLoading$),
+		)),
 	);
 
 	/**

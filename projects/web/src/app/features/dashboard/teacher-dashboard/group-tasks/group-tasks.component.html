@@ -1,0 +1,69 @@
+<section>
+	<div class="section-header">
+		<h2>Group tasks</h2>
+
+		<button
+			(click)="onAssignTaskClick()"
+			type="button"
+			mat-stroked-button
+		>
+			Assign task
+		</button>
+	</div>
+
+	<mat-table
+		[dataSource]="getItems()"
+		[trackBy]="trackById"
+	>
+		<!-- Number column -->
+		<ng-container [matColumnDef]="tableColumn.Number">
+			<mat-header-cell *matHeaderCellDef>Number</mat-header-cell>
+			<mat-cell *matCellDef="let task; dataSource: items()!">
+				@if (isSkeletonShow()) {
+					<engomc-skeleton />
+				} @else {
+					{{ task.id + 1 }}
+				}
+			</mat-cell>
+		</ng-container>
+
+		<!-- Description column -->
+		<ng-container [matColumnDef]="tableColumn.Description">
+			<mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+			<mat-cell *matCellDef="let task; dataSource: items()!">
+				@if (isSkeletonShow()) {
+					<engomc-skeleton />
+				} @else {
+					{{ task.description }}
+				}
+			</mat-cell>
+		</ng-container>
+
+		<!-- Dictionary column -->
+		<ng-container [matColumnDef]="tableColumn.Dictionary">
+			<mat-header-cell *matHeaderCellDef>Dictionary</mat-header-cell>
+			<mat-cell *matCellDef="let task; dataSource: items()!">
+				@if (isSkeletonShow()) {
+					<engomc-skeleton />
+					<engomc-skeleton />
+					<engomc-skeleton />
+				} @else {
+					<ul class="list">
+						@for (vocabulary of task.dictionary; track vocabulary.id) {
+							<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
+						}
+					</ul>
+				}
+			</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns" />
+		<mat-row *matRowDef="let row; columns: displayedColumns" />
+		<tr
+			*matNoDataRow
+			class="table__no-data-row"
+		>
+			No tasks
+		</tr>
+	</mat-table>
+</section>
