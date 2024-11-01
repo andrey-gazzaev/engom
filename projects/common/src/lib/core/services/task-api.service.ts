@@ -5,7 +5,7 @@ import { map, Observable } from 'rxjs';
 
 import { User } from '../models/user';
 import { Task } from '../models/task';
-import { groupTasksDtoSchema, tasksByUserIdDtoSchema } from '../dtos/task';
+import { availableGroupTasksDtoSchema, groupTasksDtoSchema, tasksByUserIdDtoSchema } from '../dtos/task.dto';
 import { UserTask } from '../models/user-task';
 import { UserTaskMapper } from '../mappers/user-task.mapper';
 
@@ -68,20 +68,18 @@ export class TaskApiService {
 	 */
 	public getAvailableGroupTasks(group: Group): Observable<Task[]> {
 		const query = `{
-			allGrouptasks(filter: {groupId: {notEqualTo: ${group.id}}}) {
+			availableGroupTasks(groupId: ${group.id}) {
 				nodes {
-					taskByTaskId {
-						vocabularytasksByTaskId {
-							nodes {
-								vocabularyByVocabularyId {
-									translation
-									origin
-									id
-								}
+					id
+					description
+					vocabularytasksByTaskId {
+						nodes {
+							vocabularyByVocabularyId {
+								id
+								origin
+								translation
 							}
 						}
-						description
-						id
 					}
 				}
 			}
@@ -92,9 +90,9 @@ export class TaskApiService {
 			query,
 		})
 			.pipe(
-				map(response => groupTasksDtoSchema.parse(response)),
+				map(response => availableGroupTasksDtoSchema.parse(response)),
 				map(tasksDto =>
-					tasksDto.data.allGrouptasks.nodes.flatMap(taskDto => this.taskMapper.fromDto(taskDto.taskByTaskId))),
+					tasksDto.data.availableGroupTasks.nodes.flatMap(taskDto => this.taskMapper.fromDto(taskDto))),
 			);
 	}
 
@@ -150,7 +148,9 @@ export class TaskApiService {
 	 */
 	public assignTaskToGroup(task: Task, group: Group): Observable<void> {
 		const mutation = `mutation {
-			createGrouptask(input: {grouptask: {taskId: ${task.id}, groupId: ${group.id}}})
+			createGrouptask(input: {grouptask: {taskId: ${task.id}, groupId: ${group.id}}}) {
+				clientMutationId
+			}
 		}`;
 
 		return this.httpClient

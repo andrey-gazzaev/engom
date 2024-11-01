@@ -25,3 +25,16 @@ begin
 	where ut.task_id=uncompleted_task.task_id and ut.user_id=uncompleted_task.user_id;
 end;
 $$ LANGUAGE plpgsql;
+
+create function available_group_tasks(
+	group_id integer
+) returns setof public.task as $$
+	select pt.* from public.task as pt
+	where pt.id not in (
+		select id from public.task
+		left join public.groupTask as gt on gt.task_id = id
+		where available_group_tasks.group_id = gt.group_id
+	);
+$$ language sql stable;
+
+

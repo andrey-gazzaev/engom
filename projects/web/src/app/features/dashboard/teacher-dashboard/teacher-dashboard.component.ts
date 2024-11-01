@@ -4,14 +4,19 @@ import { Group } from '@engom/common/core/models/group';
 import { UserService } from '@engom/common/core/services/user.service';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { map, switchMap } from 'rxjs';
+import { map, startWith, Subject, switchMap, tap } from 'rxjs';
 import { UserApiService } from '@engom/common/core/services/user-api.service';
 import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
 import { FullNamePipe } from '@engom/common/shared/pipes/fullname.pipe';
 import { TaskApiService } from '@engom/common/core/services/task-api.service';
 
+import { DialogService } from '@engom/common/core/services/dialog.service';
+
+import { filterFalseDialogResult } from '@engom/common/core/utils/rxjs/filter-false-dialog-result';
+
 import { UserGroupsComponent } from '../components/user-groups/user-groups.component';
 import { UserTasksComponent } from '../components/user-tasks/user-tasks.component';
+import { AssignTaskDialogComponent } from '../components/assign-task-dialog/assign-task-dialog.component';
 
 /** Teacher dashboard component. */
 @Component({
@@ -30,6 +35,8 @@ export class TeacherDashboardComponent {
 
 	private readonly taskApiService = inject(TaskApiService);
 
+	private readonly dialogService = inject(DialogService);
+
 	/** Selected group. */
 	protected readonly selectedGroup = signal<Group | null>(null);
 
@@ -42,8 +49,12 @@ export class TeacherDashboardComponent {
 		map(users => users.filter(({ role }) => role !== 'teacher')),
 	);
 
+	private readonly refreshGroupTasks$ = new Subject<void>();
+
 	/** Group tasks. */
-	protected readonly groupTasks$ = this.selectedGroup$.pipe(
+	protected readonly groupTasks$ = this.refreshGroupTasks$.pipe(
+		startWith(null),
+		switchMap(() => this.selectedGroup$),
 		filterNull(),
 		switchMap(selectedGroup => this.taskApiService.getGroupTasks(selectedGroup)),
 	);
@@ -54,5 +65,23 @@ export class TeacherDashboardComponent {
 	 */
 	protected onGroupClick(group: Group): void {
 		this.selectedGroup.set(group);
+	}
+
+	/** Handles assigning task click. */
+	protected onAssignTaskClick(): void {
+		this.dialogService
+			.openDialog(AssignTaskDialogComponent, {
+				data: {
+					group: this.selectedGroup(),
+				},
+			})
+			.afterClosed()
+			.pipe(
+				filterFalseDialogResult(),
+				tap(() => {
+					this.refreshGroupTasks$.next();
+				}),
+			)
+			.subscribe();
 	}
 }

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 
-import { TaskDto } from '../dtos/task';
+import { TaskDto } from '../dtos/task.dto';
 import { Task } from '../models/task';
 
 import { MapperFromDto } from './mappers';

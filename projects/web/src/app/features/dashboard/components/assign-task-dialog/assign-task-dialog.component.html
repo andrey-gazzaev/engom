@@ -1,0 +1,28 @@
+<h2>Available group tasks</h2>
+
+<ul>
+	@for (task of availableGroupTasks$ | async; track task.id) {
+		<li>
+			<article>
+				<h3>
+					{{ task.id + 1}}
+				</h3>
+
+				<p>
+					{{ task.description }}
+				</p>
+
+				<ul class="list">
+					@for (vocabulary of task.dictionary; track vocabulary.id) {
+						<li>{{ vocabulary.origin }} -> {{ vocabulary.translation }}</li>
+					}
+				</ul>
+
+				<button (click)="onAssignTask(task)" type="button" >
+					Assign to group
+				</button>
+			</article>
+		</li>
+
+	}
+</ul>
