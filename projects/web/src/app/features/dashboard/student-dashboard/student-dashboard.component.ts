@@ -52,7 +52,7 @@ export class StudentDashboardComponent {
 		startWith(null),
 		switchMap(() => this.userService.currentUser$),
 		filterNull(),
-		switchMap(({ id }) => this.taskApiService.getUserTasksByUserId(id)),
+		switchMap(({ id }) => this.taskApiService.getUserTasks(id)),
 	);
 
 	/**

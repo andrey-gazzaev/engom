@@ -97,10 +97,10 @@ export class TaskApiService {
 	}
 
 	/**
-	 * Gets tasks of the specified user.
+	 * Gets tasks of the specified user ID.
 	 * @param userId User ID by which tasks will be got.
 	 */
-	public getUserTasksByUserId(userId: User['id']): Observable<UserTask[]> {
+	public getUserTasks(userId: User['id']): Observable<UserTask[]> {
 		const query = `{
 			allUsers(condition: {id: ${userId}}) {
 				nodes {
@@ -149,6 +149,25 @@ export class TaskApiService {
 	public assignTaskToGroup(task: Task, group: Group): Observable<void> {
 		const mutation = `mutation {
 			createGrouptask(input: {grouptask: {taskId: ${task.id}, groupId: ${group.id}}}) {
+				clientMutationId
+			}
+		}`;
+
+		return this.httpClient
+			.post<unknown>(this.apiUrls.graphiql.zero, {
+			query: mutation,
+		})
+			.pipe(map(() => undefined));
+	}
+
+	/**
+	 * Unassigns a task to the specified group.
+	 * @param task The task to be unassigned to the group.
+	 * @param group The group to be unassigned a task.
+	 */
+	public unassignTaskFromGroup(task: Task, group: Group): Observable<void> {
+		const mutation = `mutation {
+			deleteGrouptaskByTaskIdAndGroupId(input: {taskId: ${task.id}, groupId: ${group.id}}) {
 				clientMutationId
 			}
 		}`;

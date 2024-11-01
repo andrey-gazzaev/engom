@@ -27,6 +27,7 @@
 					[items]="groupTasks$ | async"
 					[isLoading]="isGroupTasksLoading$ | async"
 					(assignTaskClicked)="onAssignTaskClick()"
+					(unassignTaskClicked)="onUnassignTaskClick($event)"
 				/>
 			}
 		</div>

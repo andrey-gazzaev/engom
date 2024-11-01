@@ -47,6 +47,6 @@ We stick to the default Angular-provided way to pass variables within the applic
 
 | Role    | Email                     | Password |
 | ------- | ------------------------- | -------- |
-| Student | Omari_Johns17@hotmail.com | student  |
+| Student | Amari.Yundt94@yahoo.com | student  |
 | Teacher | Arlie_Gerlach@gmail.com   | teacher  |
 | Admin   | admin@engom.com           | admin    |

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 
 import { Group } from '@engom/common/core/models/group';
 import { UserService } from '@engom/common/core/services/user.service';
 import { AsyncPipe } from '@angular/common';
-import { toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { BehaviorSubject, map, startWith, Subject, switchMap, tap } from 'rxjs';
 import { UserApiService } from '@engom/common/core/services/user-api.service';
 import { filterNull } from '@engom/common/core/utils/rxjs/filter-null';
@@ -12,6 +12,10 @@ import { TaskApiService } from '@engom/common/core/services/task-api.service';
 import { DialogService } from '@engom/common/core/services/dialog.service';
 import { toggleExecutionState } from '@engom/common/core/utils/rxjs/toggle-execution-state';
 import { filterFalseDialogResult } from '@engom/common/core/utils/rxjs/filter-false-dialog-result';
+
+import { Task } from '@engom/common/core/models/task';
+
+import { assertNonNullWithReturn } from '@engom/common/core/utils/assert-non-null';
 
 import { UserGroupsComponent } from '../components/user-groups/user-groups.component';
 import { UserTasksComponent } from '../components/user-tasks/user-tasks.component';
@@ -46,6 +50,8 @@ export class TeacherDashboardComponent {
 
 	private readonly dialogService = inject(DialogService);
 
+	private readonly destroyRef = inject(DestroyRef);
+
 	/** Selected group. */
 	protected readonly selectedGroup = signal<Group | null>(null);
 
@@ -72,9 +78,8 @@ export class TeacherDashboardComponent {
 		startWith(null),
 		switchMap(() => this.selectedGroup$),
 		filterNull(),
-		switchMap(selectedGroup => this.taskApiService.getGroupTasks(selectedGroup).pipe(
-			toggleExecutionState(this.isGroupTasksLoading$),
-		)),
+		switchMap(selectedGroup =>
+			this.taskApiService.getGroupTasks(selectedGroup).pipe(toggleExecutionState(this.isGroupTasksLoading$))),
 	);
 
 	/**
@@ -99,6 +104,23 @@ export class TeacherDashboardComponent {
 				tap(() => {
 					this.refreshGroupTasks$.next();
 				}),
+				takeUntilDestroyed(this.destroyRef),
+			)
+			.subscribe();
+	}
+
+	/**
+	 * Handles unassign task click.
+	 * @param task Task to unassign.
+	 */
+	protected onUnassignTaskClick(task: Task): void {
+		this.taskApiService
+			.unassignTaskFromGroup(task, assertNonNullWithReturn(this.selectedGroup()))
+			.pipe(
+				tap(() => {
+					this.refreshGroupTasks$.next();
+				}),
+				takeUntilDestroyed(this.destroyRef),
 			)
 			.subscribe();
 	}
