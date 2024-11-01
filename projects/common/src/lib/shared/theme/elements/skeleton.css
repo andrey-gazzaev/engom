@@ -1,0 +1,38 @@
+.engomc-skeleton {
+	border-radius: 3px;
+	background: linear-gradient(-45deg, #e7e7e7, #dddddd, #c9c7c7, #c9c7c7);
+	background-size: 400% 400%;
+	animation: skeleton-gradient-move 3s ease-in-out infinite;
+}
+
+@keyframes skeleton-gradient-move {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+h1.engomc-skeleton::before,
+h2.engomc-skeleton::before,
+h3.engomc-skeleton::before,
+h4.engomc-skeleton::before,
+h5.engomc-skeleton::before,
+h6.engomc-skeleton::before,
+p.engomc-skeleton::before,
+span.engomc-skeleton::before,
+time.engomc-skeleton::before,
+a.engomc-skeleton::before {
+	/* To emulate height of text. */
+	content: ".";
+	display: inline-block;
+	color: transparent;
+}
+
+.skeleton {
+	height: 48px;
+}

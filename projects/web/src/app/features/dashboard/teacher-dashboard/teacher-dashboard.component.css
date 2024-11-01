@@ -1,0 +1,26 @@
+:host {
+	display: flex;
+	flex: 1;
+}
+
+.students-section {
+	width: 100%;
+}
+
+.dashboard-page {
+	display: flex;
+	flex-direction: row;
+	gap: 25px;
+	flex: 1;
+}
+
+.dashboard-page__content {
+	display: flex;
+	flex-direction: column;
+	gap: 25px;
+	flex: 1;
+}
+
+.dashboard-page__sidebar {
+	border-right: 2px solid var(--primary-color);
+}

@@ -16,18 +16,12 @@
 			@if (selectedGroupValue === null) {
 				Please select group
 			} @else {
-				<section>
-					<h2>{{ selectedGroupValue.name }}</h2>
-
-					<p>Your students</p>
-
-					@let groupUsers = groupUsers$ | async;
-					<ul>
-						@for (user of groupUsers; track user.id) {
-							<li>{{ user | engomcFullName }}</li>
-						}
-					</ul>
-				</section>
+				<engomw-group-students
+					class="students-section"
+					[group]="selectedGroupValue"
+					[items]="students$ | async"
+					[isLoading]="isStudentsLoading$ | async"
+				/>
 
 				<section>
 					<h2>{{ selectedGroupValue.name }} Tasks</h2>

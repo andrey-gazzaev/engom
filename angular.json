@@ -109,7 +109,7 @@
           "options": {
             "main": "projects/web/src/test.ts",
             "tsConfig": "projects/web/tsconfig.spec.json",
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [],
             "karmaConfig": "projects/web/karma.conf.js",
             "assets": [
               "projects/web/src/favicon.ico",
@@ -157,7 +157,7 @@
             "main": "projects/common/src/test.ts",
             "tsConfig": "projects/common/tsconfig.spec.json",
             "karmaConfig": "projects/common/karma.conf.js",
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [],
             "codeCoverageExclude": [
               "projects/common/src/testing/**/*",
               "projects/common/src/lib/**/*.mapper.ts"
